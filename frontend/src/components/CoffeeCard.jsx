@@ -1,7 +1,43 @@
+import { FaRegEye } from "react-icons/fa6";
+import { CiEdit } from "react-icons/ci";
+import { TiDeleteOutline } from "react-icons/ti";
+import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 function CoffeeCard({ coffee }) {
 
-    const { name, quantity, supplier, taste, category, details, photo } = coffee
+    const { _id, name, quantity, supplier, taste, category, details, photo } = coffee
+
+    const handelDelete = _id => {
+        console.log(_id)
+        // Try me!
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`http://localhost:3000/coffee/${_id}`, {
+                    method: "DELETE"
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+                        if (data.deletedCount > 0) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your coffee has been deleted.",
+                                icon: "success"
+                            });
+                        }
+                    })
+            }
+        });
+    }
 
     return (
         <>
@@ -23,9 +59,11 @@ function CoffeeCard({ coffee }) {
 
                         <div className="card-actions justify-center">
                             <div className="join join-vertical space-y-3">
-                                <button className="btn join-item">View</button>
-                                <button className="btn join-item">Edit</button>
-                                <button className="btn join-item">X</button>
+                                <button className="btn join-item"><FaRegEye /></button>
+                                <Link to={`updatecoffee/${_id}`}>
+                                    <button className="btn join-item"><CiEdit /></button>
+                                </Link>
+                                <button onClick={() => handelDelete(_id)} className="btn join-item"><TiDeleteOutline /></button>
                             </div>
                         </div>
                     </div>
