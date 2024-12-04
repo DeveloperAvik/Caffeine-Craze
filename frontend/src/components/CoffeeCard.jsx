@@ -4,7 +4,7 @@ import { TiDeleteOutline } from "react-icons/ti";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 
-function CoffeeCard({ coffee }) {
+function CoffeeCard({ coffee, coffees, setCoffees }) {
 
     const { _id, name, quantity, supplier, taste, category, details, photo } = coffee
 
@@ -33,6 +33,9 @@ function CoffeeCard({ coffee }) {
                                 text: "Your coffee has been deleted.",
                                 icon: "success"
                             });
+
+                            const remaining = coffees.filter(cof=> cof._id !== _id);
+                            setCoffees(remaining)
                         }
                     })
             }
